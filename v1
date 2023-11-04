@@ -1,0 +1,177 @@
+from abc import ABC, abstractmethod
+from pymongo import MongoClient
+from dotenv import load_dotenv
+import os
+
+
+class DataRepository(ABC):
+
+    @abstractmethod
+    def __init__(self, db_connection):
+        pass
+
+    @abstractmethod
+    def _select_collection(self, value_type: Type[Union[AddressBook, NoteBook]]):
+        pass
+
+    @abstractmethod
+    def create(self, value_type: Union[AddressBook, NoteBook]):
+        pass
+
+    @abstractmethod
+    def read_all(self, value_type: Type[Union[AddressBook, NoteBook]]) -> List[Union[AddressBook, NoteBook]]:
+        pass
+
+    @abstractmethod
+    def update(self, value_type: Type[Union[AddressBook, NoteBook]], field: str, value: str, updates: dict):
+        pass
+
+    @abstractmethod
+    def update_by_criteria(self, value_type: Type[Union[AddressBook, NoteBook]], search_criteria: dict, updates:
+        pass
+
+    @abstractmethod
+    def delete(self, value_type: Type[Union[AddressBook, NoteBook]], field: str, value: str):
+        pass
+
+
+class ContactBookCollector(ABC):
+
+    @staticmethod
+    @abstractmethod
+    def get_name():
+        pass
+
+    @staticmethod
+    @abstractmethod
+    def get_surname():
+        pass
+
+    @staticmethod
+    @abstractmethod
+    def get_phone_number():
+        pass
+
+    @staticmethod
+    @abstractmethod
+    def get_email():
+        pass
+
+    @staticmethod
+    @abstractmethod
+    def get_birthday():
+        pass
+
+    @staticmethod
+    @abstractmethod
+    def get_user_input():
+        pass
+
+
+class ContactBookManager(ABC):
+
+    @abstractmethod
+    def __init__(self):
+        pass
+
+    @abstractmethod
+    def create(self, user_data):
+        pass
+
+    @abstractmethod
+    def edit(self, field, value, updates):
+        pass
+
+    @abstractmethod
+    def edit_by_criteria(self, search_criteria, updates):
+        pass
+
+    @abstractmethod
+    def delete(self, field, value):
+        pass
+
+    @abstractmethod
+    def read_all(self) -> list:
+        pass
+
+    @abstractmethod
+    def get_sorted_contacts(self, sort_key) -> list:
+        pass
+
+    @abstractmethod
+    def look_for_doubles(self, field, value):
+        pass
+
+    @abstractmethod
+    def get_days_to_birthday(self):
+        pass
+
+    @abstractmethod
+    def get_birthday_wish(name):
+        pass
+
+class NotesBookCollector(ABC):
+
+    @staticmethod
+    @abstractmethod
+    def get_title():
+        pass
+
+    @staticmethod
+    @abstractmethod
+    def get_tag():
+        pass
+
+    @staticmethod
+    @abstractmethod
+    def get_content():
+        pass
+
+    @staticmethod
+    @abstractmethod
+    def get_user_input():
+        pass
+
+class NotesBookManager(ABC):
+
+    @abstractmethod
+    def __init__(self):
+        pass
+
+    @abstractmethod
+    def create(self, user_data):
+        pass
+
+    @abstractmethod
+    def read_all(self):
+        pass
+
+    @abstractmethod
+    def sorted(self, sort_key) -> list:
+        pass
+
+    @abstractmethod
+    def edit(self, field, value, updates):
+        pass
+
+    @abstractmethod
+    def edit_by_criteria(self, search_criteria, updates):
+        pass
+
+    @abstractmethod
+    def delete(self, field, value):
+        pass
+
+    @abstractmethod
+    def look_for_doubles(self, field, value):
+        pass
+
+load_dotenv()
+mongodb_uri = os.getenv("MONGODB_URI")
+client = MongoClient(mongodb_uri)
+db = client.get_database()
+data_repository = DataRepository(db)
+contact_book_collector = ContactBookCollector()
+contact_book_manager = ContactBookManager()
+notes_book_collector = NotesBookCollector()
+notes_book_manager = NotesBookManager()
